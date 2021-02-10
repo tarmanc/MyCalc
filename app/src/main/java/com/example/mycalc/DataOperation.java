@@ -33,26 +33,26 @@ class DataOperation {
 
     //Operation based on operator:
     private float operation(operator op, StringBuilder firstVal, StringBuilder secondVal) {
+        BigDecimal firstValue = new BigDecimal(firstVal.toString());
+        BigDecimal secondValue = new BigDecimal(secondVal.toString());
+
         try {
             switch (op) {
                 //returns evaluation based on the operator button clicked by user
                 case ADD:
-                    return (Float.parseFloat(firstVal.toString()) + Float.parseFloat(secondVal.toString()));
+                    return firstValue.add(secondValue).floatValue();
                 case SUBTRACT:
-                    return (Float.parseFloat(firstVal.toString()) - Float.parseFloat(secondVal.toString()));
+                    return firstValue.subtract(secondValue).floatValue();
                 case MULTIPLY:
-                    return (Float.parseFloat(firstVal.toString()) * Float.parseFloat(secondVal.toString()));
+                    return firstValue.multiply(secondValue).floatValue();
                 case DIVIDE:
-
                     //Divide Operation with Float is faulty. See details: https://floating-point-gui.de/basic/
-                    BigDecimal firstValue = new BigDecimal(firstVal.toString());
-                    BigDecimal secondValue = new BigDecimal(secondVal.toString());
-
                     //Precision indicates total showing digits
-                    BigDecimal result = firstValue.divide(secondValue, new MathContext(10));
-
-                    return result.floatValue();
+                    return firstValue.divide(secondValue, new MathContext(10)).floatValue();
                 case PERCENTAGE:
+                    BigDecimal percentValue = secondValue.divide(new BigDecimal("100"), new MathContext(10));
+                    return firstValue.multiply(percentValue).floatValue();
+
                 default:
                     //If only firstVal is present then returns firstVal
                     return Float.parseFloat(firstVal.toString());
@@ -104,6 +104,7 @@ class DataOperation {
             operatorCount += 1;
         }
     }
+
 
     void clear() {
         input.setLength(0);
